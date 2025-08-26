@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import threading
 import json
 import time
+import os
 
 app = FastAPI()
 
@@ -27,7 +28,10 @@ latest_data = {"temperature": 0, "humidity": 0, "avg_temp": 0, "avg_hum": 0}
 def consume_stream():
     while True:
         try:
-            url = "http://localhost:3000/stream"  # Node.js API
+            # ✅ Use deployed Express API (falls back to localhost if not set)
+            url = os.getenv("EXPRESS_URL", "https://stream-processing.onrender.com") + "/stream"
+            print(f"Connecting to stream at {url}...")
+
             session = requests.Session()
             response = session.get(url, stream=True)
 
@@ -51,10 +55,15 @@ def consume_stream():
                     "avg_hum": round(avg_hum, 2)
                 }
                 
-                print(f"New data processed: Temp={temp}°C, Hum={hum}% | Avg Temp={round(avg_temp, 2)}°C, Avg Hum={round(avg_hum, 2)}% | Window size: {len(window_temp)}")
+                print(
+                    f"Processed: Temp={temp}°C, Hum={hum}% | "
+                    f"Avg Temp={round(avg_temp, 2)}°C, Avg Hum={round(avg_hum, 2)}% "
+                    f"| Window size={len(window_temp)}"
+                )
+
         except Exception as e:
             print(f"Stream connection error: {e}")
-            time.sleep(5)  # Wait before retrying
+            time.sleep(5)  # Retry after 5s
 
 @app.get("/")
 def root():
@@ -69,4 +78,3 @@ def get_processed_data():
 def startup_event():
     thread = threading.Thread(target=consume_stream, daemon=True)
     thread.start()
-

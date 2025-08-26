@@ -26,6 +26,8 @@ app.get("/stream", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("Streaming API running on http://localhost:3000/stream");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Streaming API running on http://localhost:${PORT}/stream`);
 });
