@@ -105,7 +105,7 @@ export default function Dashboard() {
           <div className="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-500 flex-1">
             <h3 className="text-sm font-medium text-gray-600">Current Humidity</h3>
             <p className="text-2xl font-bold text-green-600">
-              {rawData.length > 0 ? `${rawData[rawData.length - 1]?.humidity}%` : "--%"}
+              {rawData.length > 0 ? `${rawData[rawData.length - 1]?.humidity}%` : "--°C"}
             </p>
           </div>
 
@@ -119,7 +119,7 @@ export default function Dashboard() {
           <div className="bg-white p-4 rounded-lg shadow-md border-l-4 border-teal-500 flex-1">
             <h3 className="text-sm font-medium text-gray-600">Avg Humidity</h3>
             <p className="text-2xl font-bold text-teal-600">
-              {slidingData.length > 0 ? `${slidingData[slidingData.length - 1]?.avgHumidity}%` : "--%"}
+              {slidingData.length > 0 ? `${slidingData[slidingData.length - 1]?.avgHumidity}%` : "--°C"}
             </p>
           </div>
         </div>
